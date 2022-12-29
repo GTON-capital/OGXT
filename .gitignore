@@ -1,0 +1,17 @@
+/node_modules/
+/.env
+/.idea/
+/.openzeppelin/
+/build/
+coverage
+coverage.json
+flatten/
+cache/
+artifacts/
+types/
+package-lock.json
+
+yarn-error.log
+yarn.lock
+
+**/artifacts/
