@@ -38,16 +38,27 @@ module.exports = {
       gasPrice: 10 * 1e9,
       chainId: 1,
     },
+    bsc: {
+      accounts: [PRIVATE_KEY],
+      chainId: 56,
+      url: "https://bsc-dataseed.binance.org/",
+    },
     bscTestnet: {
       accounts: [PRIVATE_KEY],
       chainId: 97,
       url: "https://data-seed-prebsc-1-s3.binance.org:8545",
     },
     gton: {
-      url: "https://testnet.gton.network",
+      url: "https://rpc.gton.network",
       accounts: [PRIVATE_KEY],
       gasPrice: 40 * 1e9,
       gasMultiplier: 1,
+    },
+    gtonTestnet: {
+      url: "https://testnet.gton.network",
+      accounts: [PRIVATE_KEY],
+      // gasPrice: 40 * 1e9,
+      // gasMultiplier: 1,
     },
     goerli: {
       url: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
@@ -82,6 +93,7 @@ module.exports = {
         rinkeby: ETHERSCAN,
         goerli: ETHERSCAN,
         kovan: ETHERSCAN,
+        bsc: BSCSCAN,
         bscTestnet: BSCSCAN,
         // ftm
         opera: FTMSCAN,
@@ -114,7 +126,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.17",
+        version: "0.8.19",
         settings: {
           optimizer: {
             enabled: true,
