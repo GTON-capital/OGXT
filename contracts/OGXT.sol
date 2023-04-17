@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -78,6 +78,7 @@ contract OGXT is Initializable, UUPSUpgradeable {
     }
 
     function decreaseAllowance(address spender, uint subtractedValue) public virtual returns (bool) {
+        require(allowance[msg.sender][spender] >= subtractedValue, "OGXT: INSUFFICIENT_ALLOWANCE");
         _approve(msg.sender, spender, allowance[msg.sender][spender] - subtractedValue);
         return true;
     }
@@ -92,6 +93,7 @@ contract OGXT is Initializable, UUPSUpgradeable {
     }
 
     function _burn(address from, uint amount) internal virtual {
+        require(balanceOf[from]>=amount, "OGXT: INSUFFICIENT_BALANCE");
         balanceOf[from] -= amount;
         totalSupply -= amount;
 
@@ -99,24 +101,24 @@ contract OGXT is Initializable, UUPSUpgradeable {
     }
 
     /* ========== Access control methods ========== */
-    function transferOwnership(address _newOwner) public onlyOwner {
+    function transferOwnership(address _newOwner) external onlyOwner {
         emit OwnerTransferRequested(owner, _newOwner);
         newOwner = _newOwner;
     }
 
-    function claimOwnership() public {
+    function claimOwnership() external {
         require(msg.sender == newOwner, "Claim from wrong address");
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
         newOwner = address(0);
     }
 
-    function addAdmin(address user) public onlyOwner {
+    function addAdmin(address user) external onlyOwner {
         emit AdminAdded(user);
         admins[user] = true;
     }
 
-    function removeAdmin(address user) public onlyOwner {
+    function removeAdmin(address user) external onlyOwner {
         emit AdminRemoved(user);
         admins[user] = false;
     }
