@@ -10,14 +10,22 @@ import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuar
  **/
 contract ClaimOGXT is ReentrancyGuard {
 
+    /* ==========  State variables ========== */
+    IERC20 public ogxt;
+    mapping(address => uint) public allowance;
+
+    /* ==========  Constants ========== */
+    string public constant disclaimerAutoSignedByAllClaimers = 
+        "By using this contract you certify that you are not a US citizen, resident or tax resident. "
+        "By interacting with any smart contract on the GTON Capital protocol (including purchases via "
+        "bonding, staking, withdrawals, approvals, interactions with any assets on chain), you expressly "
+        "and unconditionally affirm that you are not a resident of the US and do not violate any local "
+        "regulations if based in any other jurisdiction";
+
     /* ==========  Access control ========== */
     address public owner;
     address public newOwner;
 
-    /* ==========  State variables ========== */
-    IERC20 public ogxt;
-    mapping(address => uint) public allowance;
-    
     /* ========== Constructor ========== */
     constructor(
         IERC20 ogxt_
@@ -27,7 +35,7 @@ contract ClaimOGXT is ReentrancyGuard {
     }
 
     /* ========== User actions ========== */
-    function claimOGXT() external nonReentrant {
+    function signLiabilityWaiverAndClaimOGXT() external nonReentrant {
         uint amount = allowance[msg.sender];
         require(amount > 0, "ClaimOGXT: No allowance");
 
