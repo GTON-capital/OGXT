@@ -5,6 +5,7 @@
   "author": "@bcngod",
   "license": "Business Source License 1.1",
   "scripts": {
+    "deploy:ogxt:gton": "hardhat run --network gton ./scripts/deployOGXT.js",
     "deploy:ogxt:testGton": "hardhat run --network gtonTestnet ./scripts/deployOGXT.js",
     "deploy:ogxt:bsc": "hardhat run --network bsc ./scripts/deployOGXT.js",
     "deploy:ogxt:bsctest": "hardhat run --network bscTestnet ./scripts/deployOGXT.js"

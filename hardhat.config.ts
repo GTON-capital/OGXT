@@ -51,14 +51,10 @@ module.exports = {
     gton: {
       url: "https://rpc.gton.network",
       accounts: [PRIVATE_KEY],
-      gasPrice: 40 * 1e9,
-      gasMultiplier: 1,
     },
     gtonTestnet: {
       url: "https://testnet.gton.network",
       accounts: [PRIVATE_KEY],
-      // gasPrice: 40 * 1e9,
-      // gasMultiplier: 1,
     },
     goerli: {
       url: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",

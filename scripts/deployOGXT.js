@@ -8,7 +8,8 @@ var verifyOnDeploy = true
 async function main() {
     deployer = await getDeployer()
 
-    await deployOGXT()
+    // await deployOGXT()
+    // await deployOGXTClaimContract()
 }
 
 async function getDeployer() {
@@ -95,6 +96,28 @@ async function upgradeContract(address, factoryName, args) {
     return proxy
 }
 
+async function deploy(factoryName, args) {
+    const Factory = await ethers.getContractFactory(factoryName)
+    const contract = await Factory.deploy(...args);
+    await contract.deployed()
+    console.log(factoryName + " address: ", contract.address)
+
+    if (verifyOnDeploy) {
+    await delay(20000)
+    try {
+        await hre.run("verify:verify", {
+            address: contract.address,
+            network: hre.network,
+            constructorArguments: args
+        });
+    } catch (error) {
+        console.error(error);
+        return proxy
+    }
+    }
+    return contract
+}
+
 
 async function deployOGXT() {
     const gcd = await deployUpgradable("OGXT", [])
@@ -103,6 +126,13 @@ async function deployOGXT() {
 async function upgradeOGXT() {
     const address = ""
     const upgrade = await upgradeContract(address, "OGXT", [config.vaultParams])
+}
+
+async function deployOGXTClaimContract() {
+    const ogxtBSC = "0x39833193a76F41f457082F48aDc33cB0A631C8F6"
+    const ogxtGTON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
+    const ogxt = ogxtGTON
+    const gcd = await deploy("ClaimOGXT", [ogxt])
 }
 
 async function verify(address, args) {

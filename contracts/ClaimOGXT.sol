@@ -13,6 +13,7 @@ contract ClaimOGXT is ReentrancyGuard {
     /* ==========  State variables ========== */
     IERC20 public ogxt;
     mapping(address => uint) public allowance;
+    mapping(address => bool) public didSignTheDisclaimer;
 
     /* ==========  Constants ========== */
     string public constant disclaimerAutoSignedByAllClaimers = 
@@ -40,8 +41,14 @@ contract ClaimOGXT is ReentrancyGuard {
         require(amount > 0, "ClaimOGXT: No allowance");
 
         allowance[msg.sender] = 0;
+        didSignTheDisclaimer[msg.sender] = true;
         require(ogxt.transfer(msg.sender, amount), "ClaimOGXT: transfer failed");
         emit Withdraw(msg.sender, amount);
+    }
+
+    /* ========== Views ========== */
+    function canUserClaim(address user) external view returns (bool) {
+        return allowance[user] > 0;
     }
 
     /* ========== Restricted methods ========== */
@@ -68,7 +75,7 @@ contract ClaimOGXT is ReentrancyGuard {
     }
 
     function claimOwnership() external {
-        require(msg.sender == newOwner, "Claim from wrong address");
+        require(msg.sender == newOwner, "ClaimOGXT: Claim from the wrong address");
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
         newOwner = address(0);
@@ -76,7 +83,7 @@ contract ClaimOGXT is ReentrancyGuard {
 
     /* ==========  Modifiers ========== */
     modifier onlyOwner() {
-        require(msg.sender == owner, "OGXT: NOT_OWNER");
+        require(msg.sender == owner, "ClaimOGXT: NOT_OWNER");
         _;
     }
 
